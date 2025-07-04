@@ -17,6 +17,12 @@ pub const SUCCESS: i32 = 0;
     run_decode("lli317e9:pineappleee", "[[317,\"pineapple\"]]\n", NO_ERROR, SUCCESS);
     run_decode("lli4eei5ee", "[[4],5]\n", NO_ERROR, SUCCESS);
 }
+#[test] fn decode_dictionary() {
+    run_decode("de", "{}\n", NO_ERROR, SUCCESS);
+    run_decode("d3:foo5:apple5:helloi52ee", "{\"foo\":\"apple\",\"hello\":52}\n", NO_ERROR, SUCCESS);
+    run_decode("d10:inner_dictd4:key16:value14:key2i42e8:list_keyl5:item15:item2i3eeee",
+               "{\"inner_dict\":{\"key1\":\"value1\",\"key2\":42,\"list_key\":[\"item1\",\"item2\",3]}}\n", NO_ERROR, SUCCESS);
+}
 
 pub fn run_decode(
     input: &str,

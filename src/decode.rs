@@ -4,10 +4,36 @@ pub fn decode_bencoded_value(encoded_value: &str) -> (serde_json::Value, usize) 
     match encoded_value.chars().next().unwrap() {
         'i' => decode_integer(encoded_value),
         'l' => decode_list(encoded_value),
+        'd' => decode_dictionary(encoded_value),
         c if c.is_digit(10) => decode_string(encoded_value),
         _ => panic ! ("Unhandled encoded value: {}", encoded_value)
     }
 }
+
+fn decode_dictionary(encoded: &str) -> (serde_json::Value, usize) {
+    let mut total_len = 0;
+    let mut dict = serde_json::Map::new();
+    let mut input = &encoded[1..]; // Skip 'd'
+
+    while !input.starts_with('e') {
+        let (key_json, key_len) = decode_bencoded_value(input);
+        total_len += key_len;
+        input = &input[key_len..];
+
+        let (value, val_len) = decode_bencoded_value(input);
+        total_len += val_len;
+        input = &input[val_len..];
+
+        // Extract the raw key string from the JSON string
+        let key = key_json.to_string();
+        let trimmed_key: String = key.chars().skip(1).take(key.len() - 2).collect();
+
+        dict.insert(trimmed_key, value);
+    }
+
+    (serde_json::Value::Object(dict), total_len + 2) // +2 for 'd' and 'e'
+}
+
 
 fn decode_list(encoded_value: &str) -> (serde_json::Value, usize) {
     // Parse list: l<values>e
