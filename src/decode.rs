@@ -6,7 +6,7 @@ pub fn decode_bencoded_value(encoded_value: &str) -> (serde_json::Value, &str) {
         'l' => decode_list(encoded_value),
         'd' => decode_dictionary(encoded_value),
         c if c.is_digit(10) => decode_string(encoded_value),
-        _ => panic ! ("Unhandled encoded value: {}", encoded_value)
+        _ => panic!("Unhandled encoded value: {}", encoded_value)
     }
 }
 
