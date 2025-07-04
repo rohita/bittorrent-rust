@@ -12,8 +12,8 @@ fn main() {
         //eprintln!("Logs from your program will appear here!");
 
         let encoded_value = &args[2];
-        let decoded_value = decode::decode_bencoded_value(encoded_value);
-        println!("{}", decoded_value.to_string());
+        let (decoded_value, _) = decode::decode_bencoded_value(encoded_value);
+        println!("{}", decoded_value);
     } else {
         println!("unknown command: {}", args[1])
     }

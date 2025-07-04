@@ -3,15 +3,19 @@ use assert_cmd::Command;
 pub const NO_ERROR: &str = "";
 pub const SUCCESS: i32 = 0;
 
-#[test]
-fn decode_string() {
+#[test] fn decode_string() {
     run_decode("4:pear", "\"pear\"\n", NO_ERROR, SUCCESS);
     run_decode("9:raspberry", "\"raspberry\"\n", NO_ERROR, SUCCESS);
 }
-#[test]
-fn decode_integer() {
+#[test] fn decode_integer() {
     run_decode("i1052617151e", "1052617151\n", NO_ERROR, SUCCESS);
     run_decode("i-52e", "-52\n", NO_ERROR, SUCCESS);
+}
+#[test] fn decode_list() {
+    run_decode("le", "[]\n", NO_ERROR, SUCCESS);
+    run_decode("l9:pineapplei317ee", "[\"pineapple\",317]\n", NO_ERROR, SUCCESS);
+    run_decode("lli317e9:pineappleee", "[[317,\"pineapple\"]]\n", NO_ERROR, SUCCESS);
+    run_decode("lli4eei5ee", "[[4],5]\n", NO_ERROR, SUCCESS);
 }
 
 pub fn run_decode(
