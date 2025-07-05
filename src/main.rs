@@ -13,9 +13,12 @@ fn main() {
         println!("{}", decoded_value);
     } else if command == "info" {
         let file_name = &args[2];
-        let torrent = torrent::parse_torrent_file(file_name);
+        let content = std::fs::read(file_name).expect("Cannot read torrent file.");
+        let torrent = torrent::parse_torrent(content.as_slice());
+        let info_hash = torrent::get_info_hash(&torrent);
         println!("Tracker URL: {}", torrent.announce);
         println!("Length: {}", torrent.info.length);
+        println!("Info Hash: {}", info_hash);
     } else {
         println!("unknown command: {}", args[1])
     }

@@ -58,3 +58,37 @@ fn decode_string(encoded_value: &str) -> (serde_json::Value, &str) {
 
     (serde_json::Value::String(string.to_string()), &encoded_value[end..])
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_decode() {
+        // String
+        assert("4:pear", "\"pear\"");
+        assert("9:raspberry", "\"raspberry\"");
+        assert("55:http://bittorrent-test-tracker.codecrafters.io/announce",
+               "\"http://bittorrent-test-tracker.codecrafters.io/announce\"");
+
+        // Integer
+        assert("i1052617151e", "1052617151");
+        assert("i-52e", "-52");
+
+        // List
+        assert("le", "[]");
+        assert("l9:pineapplei317ee", "[\"pineapple\",317]");
+        assert("lli317e9:pineappleee", "[[317,\"pineapple\"]]");
+        assert("lli4eei5ee", "[[4],5]");
+
+        // Dictionary
+        assert("de", "{}");
+        assert("d3:foo5:apple5:helloi52ee", "{\"foo\":\"apple\",\"hello\":52}");
+        assert("d10:inner_dictd4:key16:value14:key2i42e8:list_keyl5:item15:item2i3eeee",
+               "{\"inner_dict\":{\"key1\":\"value1\",\"key2\":42,\"list_key\":[\"item1\",\"item2\",3]}}");
+    }
+
+    fn assert(input: &str, expected: &str) {
+        assert_eq!(decode_bencoded_value(input).0.to_string(), expected);
+    }
+}
