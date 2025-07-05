@@ -5,11 +5,12 @@ authors = ["Rohit Agarwal <rohit@@codingpapa.net>"]
 edition = "2024"
 
 [dependencies]
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-serde_bencode = "0.2"
-reqwest = "0.12"
+serde_bencode = "0.2.4"
 serde_bytes = "0.11.17"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
 
 [dev-dependencies]
-assert_cmd = "2"
+assert_cmd = "2.0.17"
+tempfile = "3.20.0"
+indoc = "2.0.6"
