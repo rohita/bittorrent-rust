@@ -15,10 +15,14 @@ fn main() {
         let file_name = &args[2];
         let content = std::fs::read(file_name).expect("Cannot read torrent file.");
         let torrent = torrent::parse_torrent(content.as_slice());
-        let info_hash = torrent::get_info_hash(&torrent);
+
         println!("Tracker URL: {}", torrent.announce);
         println!("Length: {}", torrent.info.length);
-        println!("Info Hash: {}", info_hash);
+        println!("Info Hash: {}", torrent.get_info_hash());
+        println!("Piece Length: {}", torrent.info.piece_length);
+        for piece_hash in torrent.get_piece_hashes() {
+            println!("{piece_hash}");
+        }
     } else {
         println!("unknown command: {}", args[1])
     }
